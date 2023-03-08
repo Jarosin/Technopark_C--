@@ -1,25 +1,41 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-int main()
+
+std::string FindFilms(std::string file_name, std::string artist_name)
 {
-    std::string artist_name = "Robert De Niro";
-    std::string file_name = "../name.basics.tsv";
-    std::ifstream myfile; 
+    std::ifstream myfile;
+    myfile.open(file_name);
     std::string name;
     std::string temp;
-    myfile.open(file_name);
-    while (name.size() == 0 && !myfile.eof())
+    while (name.length() == 0 && !myfile.eof())
     {
         for (int i = 0; i < 2; i++)
         {
             std::getline(myfile, temp, '\t');
         }
         if (temp == artist_name)
+        {
             name = temp;
-        std::getline(myfile, temp);
+            for (int i = 0; i < 3; i++)
+            {
+                std::getline(myfile, temp, '\t');
+            }
+            std::getline(myfile, temp, '\n');
+
+        }
+        else
+            std::getline(myfile, temp);
     }
-    std::cout << name << std::endl;
-    //std::cout << temp;
+    return temp;
+}
+int main()
+{
+    std::string artist_name = "Anya Chipovskaya";
+    std::string file_name = "../name.basics.tsv";
+    std::string films;
+    std::ifstream myfile; 
+    films = FindFilms(file_name, artist_name);
+    std::cout << films << std::endl;
     return 0;
 }
