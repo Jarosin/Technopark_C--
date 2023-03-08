@@ -76,7 +76,6 @@ int main(int argc, char *argv[])
     {
         return 0;
     } 
-    std::cout << argv[1] << " " << argv[2] << " " << argv[3];
     std::string nfile_name = argv[1];
     std::string ffile_name = argv[2];
     std::string artist_name = argv[3];
