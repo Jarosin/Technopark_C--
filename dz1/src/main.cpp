@@ -69,12 +69,17 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films)
         std::getline(myfile, temp, '\n');  
     }
 }
-
-int main()
+//1 - файл с актерами, 2 - файл с фильмами, 3 - имя актера
+int main(int argc, char *argv[])
 {
-    std::string artist_name = "Anya Chipovskaya";
-    std::string nfile_name = "../name.basics.tsv";
-    std::string ffile_name = "../title.basics.tsv";
+    if (argc != 4)
+    {
+        return 0;
+    } 
+    std::cout << argv[1] << " " << argv[2] << " " << argv[3];
+    std::string nfile_name = argv[1];
+    std::string ffile_name = argv[2];
+    std::string artist_name = argv[3];
     std::string raw_films;
     std::vector<std::string> parsed_films;
     std::ifstream myfile; 
