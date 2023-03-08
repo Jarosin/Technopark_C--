@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <vector>
+#include <sstream>
 std::string FindFilms(std::string file_name, std::string artist_name)
 {
     std::ifstream myfile;
@@ -29,13 +30,30 @@ std::string FindFilms(std::string file_name, std::string artist_name)
     }
     return temp;
 }
+std::vector<std::string> ParseFilmIdString(std::string film_ids)
+{
+    std::string temp;
+    std::stringstream buff(film_ids);
+    std::vector<std::string> res;
+    while (std::getline(buff, temp, ','))
+    {
+        res.push_back(temp);
+    }
+    return res;
+}
 int main()
 {
     std::string artist_name = "Anya Chipovskaya";
     std::string file_name = "../name.basics.tsv";
-    std::string films;
+    std::string raw_films;
+    std::vector<std::string> parsed_films;
     std::ifstream myfile; 
-    films = FindFilms(file_name, artist_name);
-    std::cout << films << std::endl;
+    raw_films = FindFilms(file_name, artist_name);
+    std::cout << raw_films << std::endl;
+    parsed_films = ParseFilmIdString(raw_films);
+    for (auto it = parsed_films.begin(); it < parsed_films.end(); it++)
+    {
+        std::cout << (*it) << std::endl;
+    }
     return 0;
 }
