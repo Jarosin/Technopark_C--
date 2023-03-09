@@ -8,6 +8,9 @@ std::string FindFilms(std::string file_name, std::string artist_name)
 {
     std::ifstream myfile;
     myfile.open(file_name);
+    if (!myfile)
+        return "";
+
     std::string name;
     std::string temp;
     while (name.length() == 0 && !myfile.eof())
@@ -29,6 +32,7 @@ std::string FindFilms(std::string file_name, std::string artist_name)
         else
             std::getline(myfile, temp);
     }
+    myfile.close();
     return temp;
 }
 std::vector<std::string> ParseFilmIdString(std::string film_ids)
@@ -42,10 +46,12 @@ std::vector<std::string> ParseFilmIdString(std::string film_ids)
     }
     return res;
 }
-void FindFilmNames(std::string file_name, std::vector<std::string> &films)
+void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::vector<bool> &checked_films)
 {
     std::ifstream myfile;
     myfile.open(file_name);
+    if (!myfile.is_open())
+        return;
     std::string name;
     std::string temp;
     while (name.length() == 0 && !myfile.eof())
@@ -55,6 +61,7 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films)
         {
             if ((*it) == temp)
             {
+                checked_films[it - films.begin()] = true;
                 for (int i = 0; i < 3; i++)
                 {
                     std::getline(myfile, temp, '\t');
@@ -68,6 +75,7 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films)
         }
         std::getline(myfile, temp, '\n');  
     }
+    myfile.close();
 }
 //1 - файл с актерами, 2 - файл с фильмами, 3 - имя актера
 int main(int argc, char *argv[])
@@ -83,11 +91,13 @@ int main(int argc, char *argv[])
     std::vector<std::string> parsed_films;
     std::ifstream myfile; 
     raw_films = FindFilms(nfile_name, artist_name);
-    parsed_films = ParseFilmIdString(raw_films);
-    FindFilmNames(ffile_name, parsed_films);
+    parsed_films = ParseFilmIdString(raw_films);   
+    std::vector<bool> checked_films(parsed_films.size(), false);
+    FindFilmNames(ffile_name, parsed_films, checked_films);
     for (auto it = parsed_films.begin(); it < parsed_films.end(); it++)
     {
-        std::cout << (*it) << std::endl;
+        if (checked_films[it - parsed_films.begin()])
+            std::cout << (*it) << std::endl;    
     }
     return 0;
 }
