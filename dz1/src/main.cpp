@@ -101,3 +101,4 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
+//todo: можно переорганизовать ввод под do-while
