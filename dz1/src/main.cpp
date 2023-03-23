@@ -7,7 +7,7 @@
 #include "args.hpp"
 #include "films.hpp"
 #include "file.hpp"
-//1 - файл с актерами, 2 - файл с фильмами, 3 - имя актера
+
 int main(int argc, char *argv[])
 {    
     std::string name_file_name = "";
