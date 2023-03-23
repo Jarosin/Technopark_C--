@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "args.hpp"
 #include "films.hpp"
 #include "file.hpp"
@@ -25,15 +26,17 @@ int main(int argc, char *argv[])
     {
         return rc;
     }
-
+    
+    std::ifstream name_file(name_file_name, std::ifstream::in);
+    std::ifstream title_file(title_file_name, std::ifstream::in);
     std::vector<std::string> film_names;
     //находим id фильмов
-    rc = FindFilmIds(name_file_name, actor_name, film_names);
+    rc = FindFilmIds(name_file, actor_name, film_names);
     if (!rc)
     {
         std::vector<bool> checked_films(film_names.size(), false);
         //находим имена фильмов по id и чистим неподходящие по критериям
-        FindFilmNames(title_file_name, film_names, checked_films); 
+        FindFilmNames(title_file, film_names, checked_films); 
         rc = ClearFilmNames(film_names, checked_films);
         if (!rc)
         {
@@ -43,5 +46,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+    name_file.close();
+    title_file.close();
     return rc;
 }

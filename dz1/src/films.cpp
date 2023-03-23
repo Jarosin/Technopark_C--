@@ -13,38 +13,36 @@ bool isRussian(std::string name)
     return true;
 }
 
-int FindFilmIds(std::string file_name, std::string actor_name, std::vector<std::string>& film_names)
+int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::string>& film_names)
 {
-    std::ifstream myfile;
-    myfile.open(file_name);
-    if (!myfile)
+    if (!in)
     {
         return 1;
     }
     std::string name = "";
     std::string temp;
-    while (name.empty() && !myfile.eof())
+    while (name.empty() && !in.eof())
     {
         //второй столбик - имя актера
         for (int i = 0; i < 2; i++)
         {
-            std::getline(myfile, temp, '\t');
+            std::getline(in, temp, '\t');
         }
         if (temp == actor_name)
         {
             //6ой столбик - перечисление id фильмов актера
             for (int i = 0; i < 3; i++)
             {
-                std::getline(myfile, temp, '\t');
+                std::getline(in, temp, '\t');
             }
             //берем до конца строки чтобы не захватить лишнего
-            std::getline(myfile, temp, '\n');
+            std::getline(in, temp, '\n');
             name = temp;
         }
         else
-            std::getline(myfile, temp, '\n');
+            std::getline(in, temp, '\n');
     }
-    myfile.close();
+    in.close();
     if (name.length() == 0)
     {
         std::cout << "Couldnt find any films with the actor" << std::endl;
@@ -66,19 +64,17 @@ std::vector<std::string> ParseFilmIdString(std::string film_ids)
     return res;
 }
 
-void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::vector<bool> &checked_films)
+void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vector<bool> &checked_films)
 {
-    std::ifstream myfile;
-    myfile.open(file_name);
-    if (!myfile.is_open())
+    if (!in.is_open())
     {
         return;
     }
     std::string name;
     std::string temp;
-    while (name.length() == 0 && !myfile.eof())
+    while (name.length() == 0 && !in.eof())
     {
-        std::getline(myfile, temp, '\t');
+        std::getline(in, temp, '\t');
         //пока так из-за checked_films строчки ниже
         for (auto it = films.begin(); it < films.end(); it++)
         {
@@ -90,7 +86,7 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::
 
             //нашли фильм
             checked_films[it - films.begin()] = true;
-            std::getline(myfile, temp, '\t');
+            std::getline(in, temp, '\t');
             if (temp != "movie")
             {
                 *it = "";
@@ -98,27 +94,27 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::
             }
 
             //получаем primaryTitle
-            std::getline(myfile, temp, '\t');
+            std::getline(in, temp, '\t');
             *it = temp;
 
             //проверка на русское название для originalTitle(из ревью следует что это необходимо поменять на проверку региона)
-            std::getline(myfile, temp, '\t');
+            std::getline(in, temp, '\t');
             if (isRussian(temp))
             {
                 *it = temp;
             }
     
             //проверка на фильм для взрослых
-            std::getline(myfile, temp, '\t');
+            std::getline(in, temp, '\t');
             if (temp == "1")
             {
                 *it = "";
             }
             break;
         }
-        std::getline(myfile, temp, '\n');  
+        std::getline(in, temp, '\n');  
     }
-    myfile.close();
+    in.close();
 }
 
 int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &checked_films)
