@@ -1,1 +1,0 @@
-/home/jarozin/Documents/name.basics.tsv /home/jarozin/Documents/title.basics.tsv  "Anya Chipovskaya"
