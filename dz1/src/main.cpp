@@ -60,9 +60,15 @@ void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::
         for (auto it = films.begin(); it < films.end(); it++)
         {
             if ((*it) == temp)
-            {
+            {      
                 checked_films[it - films.begin()] = true;
-                for (int i = 0; i < 3; i++)
+                std::getline(myfile, temp, '\t');
+                if (temp != "movie")
+                {
+                    *it = "";
+                    break;
+                }
+                for (int i = 0; i < 2; i++)
                 {
                     std::getline(myfile, temp, '\t');
                 }
