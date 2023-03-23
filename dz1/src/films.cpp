@@ -1,18 +1,5 @@
 #include <films.hpp>
 
-bool isRussian(std::string name)
-{
-    std::string rus = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ ,;':.!?<>[]{}";
-    for (auto i = name.begin(); i < name.end(); i++)
-    {
-        if (rus.find(*i) == std::string::npos && !std::isdigit(*i))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::string>& film_names)
 {
     if (!in)
@@ -23,19 +10,19 @@ int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::stri
     std::string temp;
     while (name.empty() && !in.eof())
     {
-        //второй столбик - имя актера
+        //2-ой столбик - имя актера
         for (int i = 0; i < 2; i++)
         {
             std::getline(in, temp, '\t');
         }
         if (temp == actor_name)
         {
-            //6ой столбик - перечисление id фильмов актера
+            //6-ой столбик - перечисление id фильмов актера
             for (int i = 0; i < 3; i++)
             {
                 std::getline(in, temp, '\t');
             }
-            //берем до конца строки чтобы не захватить лишнего
+            //берем до конца строки чтобы не захватить лишнего со следующей
             std::getline(in, name, '\n');
         }
         else
@@ -105,6 +92,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
             checked_films[it - films.begin()] = true;
             break;
         }
+        //дочитываем строку
         std::getline(in, temp, '\n');  
     }
     in.close();
@@ -117,6 +105,7 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string
     int rc = 0, found_films = 0;
     for (auto it = res.begin(); it < res.end(); it++)
     {
+        //отмечаем что смогли найти фильм
         if (checked_films[it - res.begin()])
         {
             found_films++;

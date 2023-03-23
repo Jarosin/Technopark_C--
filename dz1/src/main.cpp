@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     std::ifstream title_file(title_file_name, std::ifstream::in);
     std::ifstream title_akas_file(title_akas_file_name, std::ifstream::in);
     std::vector<std::string> film_names;
+    
     //находим id фильмов
     rc = FindFilmIds(name_file, actor_name, film_names);
     if (!rc)

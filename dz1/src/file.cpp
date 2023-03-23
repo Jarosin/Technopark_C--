@@ -5,6 +5,7 @@ int CheckDocument(std::string file_name, int columns)
     {
         return 1;
     }
+
     std::ifstream file; 
     file.open(file_name);
     if (!file.is_open())
@@ -12,6 +13,7 @@ int CheckDocument(std::string file_name, int columns)
         std::cout << "Cant open file" << std::endl;
         return 1;
     }
+    
     std::string temp = "";
     for (int i = 0; i < columns; i++)
     {
