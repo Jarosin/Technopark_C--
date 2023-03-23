@@ -36,8 +36,7 @@ int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::stri
                 std::getline(in, temp, '\t');
             }
             //берем до конца строки чтобы не захватить лишнего
-            std::getline(in, temp, '\n');
-            name = temp;
+            std::getline(in, name, '\n');
         }
         else
             std::getline(in, temp, '\n');
@@ -72,7 +71,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     }
     std::string name;
     std::string temp;
-    while (name.length() == 0 && !in.eof())
+    while (name.empty() && !in.eof())
     {
         std::getline(in, temp, '\t');
         //пока так из-за checked_films строчки ниже
