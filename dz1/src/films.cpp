@@ -92,11 +92,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
 
             //получаем primaryTitle
             std::getline(in, temp, '\t');
-            //и присваиваем если не нашли название на русском до этого
-            if (checked_films[it - films.begin()] == false)
-            {
-                *it = temp;
-            }
+            *it = temp;
             //пропускаем originalTitle
             std::getline(in, temp, '\t');
 
@@ -125,6 +121,7 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string
         {
             found_films++;
         }
+        //сливаем вместе если найдено хотя бы одно из названий
         if (checked_films[it - res.begin()] && *it != "")
         {
             if (!russian_titles[it - res.begin()].empty())
