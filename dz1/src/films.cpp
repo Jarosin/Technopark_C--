@@ -1,52 +1,59 @@
 #include <films.hpp>
+
 bool isRussian(std::string name)
 {
-    //я пытался сделать по человечески
-    /*std::locale loc("ru-RU");
-    for (auto it = name.begin(); it < name.end(); it++)
-        if (!(std::isalpha(*it, loc) || std::isdigit(*it)))
-            return 0;*/
     std::string rus = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ ,;':.!?<>[]{}";
     for (auto i = name.begin(); i < name.end(); i++)
     {
-        if (std::isdigit(*i))
-            continue;
-        if (rus.find(*i) == std::string::npos)
+        if (rus.find(*i) == std::string::npos && !std::isdigit(*i))
+        {
             return false;
+        }
     }
     return true;
 }
-std::string FindFilms(std::string file_name, std::string artist_name)
+
+int FindFilms(std::string file_name, std::string actor_name, std::vector<std::string>& film_names)
 {
     std::ifstream myfile;
     myfile.open(file_name);
     if (!myfile)
-        return "";
-
-    std::string name;
-    std::string temp;
-    while (name.length() == 0 && !myfile.eof())
     {
+        return 1;
+    }
+    std::string name = "";
+    std::string temp;
+    while (name.empty() && !myfile.eof())
+    {
+        //второй столбик - имя актера
         for (int i = 0; i < 2; i++)
         {
             std::getline(myfile, temp, '\t');
         }
-        if (temp == artist_name)
+        if (temp == actor_name)
         {
-            name = temp;
+            //6ой столбик - перечисление id фильмов актера
             for (int i = 0; i < 3; i++)
             {
                 std::getline(myfile, temp, '\t');
             }
+            //берем до конца строки чтобы не захватить лишнего
             std::getline(myfile, temp, '\n');
-
+            name = temp;
         }
         else
-            std::getline(myfile, temp);
+            std::getline(myfile, temp, '\n');
     }
     myfile.close();
-    return temp;
+    if (name.length() == 0)
+    {
+        std::cout << "Couldnt find any films with the actor" << std::endl;
+        return 1;
+    }
+    film_names = ParseFilmIdString(name);
+    return 0;
 }
+
 std::vector<std::string> ParseFilmIdString(std::string film_ids)
 {
     std::string temp;
@@ -58,44 +65,88 @@ std::vector<std::string> ParseFilmIdString(std::string film_ids)
     }
     return res;
 }
+
 void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::vector<bool> &checked_films)
 {
     std::ifstream myfile;
     myfile.open(file_name);
     if (!myfile.is_open())
+    {
         return;
+    }
     std::string name;
     std::string temp;
     while (name.length() == 0 && !myfile.eof())
     {
         std::getline(myfile, temp, '\t');
+        //пока так из-за checked_films строчки ниже
         for (auto it = films.begin(); it < films.end(); it++)
         {
-            if ((*it) == temp)
-            {      
-                checked_films[it - films.begin()] = true;
-                std::getline(myfile, temp, '\t');
-                if (temp != "movie")
-                {
-                    *it = "";
-                    break;
-                }
+            //если не нужный id - идем дальше
+            if ((*it) != temp)
+            {
+                continue;
+            }   
 
-                std::getline(myfile, temp, '\t');
-                *it = temp;
-
-                std::getline(myfile, temp, '\t');
-                if (isRussian(temp))
-                    *it = temp;
-
-                std::getline(myfile, temp, '\t');
-                if (temp == "1")
-                    *it = "";
+            //нашли фильм
+            checked_films[it - films.begin()] = true;
+            std::getline(myfile, temp, '\t');
+            if (temp != "movie")
+            {
+                *it = "";
                 break;
             }
+
+            //получаем primaryTitle
+            std::getline(myfile, temp, '\t');
+            *it = temp;
+
+            //проверка на русское название для originalTitle(из ревью следует что это необходимо поменять на проверку региона)
+            std::getline(myfile, temp, '\t');
+            if (isRussian(temp))
+            {
+                *it = temp;
+            }
+    
+            //проверка на фильм для взрослых
+            std::getline(myfile, temp, '\t');
+            if (temp == "1")
+            {
+                *it = "";
+            }
+            break;
         }
         std::getline(myfile, temp, '\n');  
     }
     myfile.close();
 }
 
+int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &checked_films)
+{
+    std::vector<std::string> res = film_names;
+    film_names.clear();
+    int rc = 0, found_films = 0;
+    for (auto it = res.begin(); it < res.end(); it++)
+    {
+        if (checked_films[it - res.begin()])
+        {
+            found_films++;
+        }
+        if (checked_films[it - res.begin()] && *it != "")
+        {
+            film_names.push_back(*it);
+        }
+    }
+    //нет найденных фильмов
+    if (!found_films)
+    {
+        std::cout << "Could not find required info on films in a file" << std::endl;
+        return 1;
+    }
+    //все фильмы не подошли/не были проверены
+    if (!film_names.size())
+    {
+        std::cout << "Didnt find any films meeting the criteria" << std::endl;
+    }
+    return 0;
+}

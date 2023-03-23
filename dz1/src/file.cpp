@@ -2,7 +2,9 @@
 int CheckDocument(std::string file_name, int columns)
 {
     if (columns < 1)
+    {
         return 1;
+    }
     std::ifstream file; 
     file.open(file_name);
     if (!file.is_open())
@@ -18,7 +20,9 @@ int CheckDocument(std::string file_name, int columns)
         if (temp.find('\n') != std::string::npos)
         {
             if (i == columns - 1)
+            {
                 return 0;
+            }
         }
     }
     std::cout << "File has wrong number of columns" << std::endl;
