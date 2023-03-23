@@ -9,4 +9,5 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
 std::vector<std::string> ParseFilmIdString(std::string film_ids);
 int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::string> &filmed_names);
 bool isRussian(std::string name);
-int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &checked_films);
+int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string> &russian_titles, std::vector<bool> &checked_films);
+int CheckRus(std::ifstream &in, std::vector<std::string> &films);

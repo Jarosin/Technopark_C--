@@ -16,4 +16,5 @@ gunzip title.basics.tsv.gz
 Вывести русские названия (при наличии) всех фильмов, в которых играл актер, имя которого переданно в аргументах командной строки
 
 (от меня)Пример работы:
-./dz1 --name-basics-file=name.basics.tsv --title-basics-file=title.basics.tsv --actor-name="Anya Chipovskaya"
+./dz1 --name-basics-file=name.basics.tsv --title-basics-file=title.basics.tsv --title-akas-name=title.akas.tsv --actor-name="Anya Chipovskaya"
+Также написан --help

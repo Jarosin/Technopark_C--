@@ -74,7 +74,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     while (name.empty() && !in.eof())
     {
         std::getline(in, temp, '\t');
-        //пока так из-за checked_films строчки ниже
+        //пока так из-за использования арифметики указателей
         for (auto it = films.begin(); it < films.end(); it++)
         {
             //если не нужный id - идем дальше
@@ -83,8 +83,6 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
                 continue;
             }   
 
-            //нашли фильм
-            checked_films[it - films.begin()] = true;
             std::getline(in, temp, '\t');
             if (temp != "movie")
             {
@@ -94,21 +92,21 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
 
             //получаем primaryTitle
             std::getline(in, temp, '\t');
-            *it = temp;
-
-            //проверка на русское название для originalTitle(из ревью следует что это необходимо поменять на проверку региона)
-            std::getline(in, temp, '\t');
-            if (isRussian(temp))
+            //и присваиваем если не нашли название на русском до этого
+            if (checked_films[it - films.begin()] == false)
             {
                 *it = temp;
             }
-    
+            //пропускаем originalTitle
+            std::getline(in, temp, '\t');
+
             //проверка на фильм для взрослых
             std::getline(in, temp, '\t');
             if (temp == "1")
             {
                 *it = "";
-            }
+            } 
+            checked_films[it - films.begin()] = true;
             break;
         }
         std::getline(in, temp, '\n');  
@@ -116,7 +114,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     in.close();
 }
 
-int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &checked_films)
+int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string> &russian_titles, std::vector<bool> &checked_films)
 {
     std::vector<std::string> res = film_names;
     film_names.clear();
@@ -129,6 +127,10 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &chec
         }
         if (checked_films[it - res.begin()] && *it != "")
         {
+            if (!russian_titles[it - res.begin()].empty())
+            {
+                *it = russian_titles[it - res.begin()];
+            }
             film_names.push_back(*it);
         }
     }
@@ -142,6 +144,36 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &chec
     if (!film_names.size())
     {
         std::cout << "Didnt find any films meeting the criteria" << std::endl;
+    }
+    return 0;
+}
+
+int CheckRus(std::ifstream &in, std::vector<std::string> &films)
+{
+    std::string name = "";
+    std::string temp = "";
+    std::vector<std::string> res = films;
+    //по дефолту - пустая строка
+    for (int i = 0; i < films.size(); i++)
+    {
+        films[i] = "";
+    }
+    while (!in.eof())
+    {
+        std::getline(in, temp, '\t');
+        for (auto it = res.begin(); it < res.end(); it++)
+        {
+            if (temp != *it)
+                continue;
+            std::getline(in, temp, '\t');
+            std::getline(in, name, '\t');
+            std::getline(in, temp, '\t');
+            if (temp == "RU")
+            {
+                films[it - res.begin()] = name;
+            }
+        }
+        std::getline(in, temp, '\n');
     }
     return 0;
 }

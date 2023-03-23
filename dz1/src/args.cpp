@@ -1,5 +1,5 @@
 #include "args.hpp"
-int ParseArguments(int argc, char *argv[], std::string &name_file_name, std::string &title_file_name, std::string &actor_name)
+int ParseArguments(int argc, char *argv[], std::string &name_file_name, std::string &title_file_name, std::string &title_akas_file_name, std::string &actor_name)
 {
     int opt;
     int option_index = 0;
@@ -8,9 +8,10 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name, std::str
         {"name-basics-file", 1, 0, 'n'},
         {"help", 0, 0, 'h'},
         {"actor-name", 1, 0, 'a'},
+        {"title-akas-name", 1, 0, 'k'},
         {0, 0, 0, 0}
     };
-     while ((opt = getopt_long_only(argc, argv, "abc", long_options, &option_index)) != -1)
+     while ((opt = getopt_long_only(argc, argv, "g", long_options, &option_index)) != -1)
     {
         switch(opt)
         {
@@ -26,15 +27,20 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name, std::str
                 actor_name = optarg;
                 break;
             case 'h':
-                std::cout << "Required arguments: --name-basics-file=filename1 --title-basics-file=filename2 --actor-name=actor_name" << std::endl;
+                std::cout << "Required arguments: --name-basics-file=filename1 --title-basics-file=filename2 --actor-name=actor_name --title-akas-name" << std::endl;
                 return 1;
                 break;
+            case 'k':
+            {
+                title_akas_file_name = optarg;
+                break;
+            }
             default:
                 std::cout << "Unknown option given" << std::endl;
                 return 1;
         }
     }
-    if (title_file_name.empty() || name_file_name.empty() || actor_name.empty())
+    if (title_file_name.empty() || name_file_name.empty() || actor_name.empty() || title_akas_file_name.empty())
     {
         std::cout << "Not all arguments were given" << std::endl;
         return 1;
