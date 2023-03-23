@@ -26,14 +26,14 @@ int main(int argc, char *argv[])
         return rc;
     }
 
-    
     std::vector<std::string> film_names;
-    rc = FindFilms(name_file_name, actor_name, film_names);
+    //находим id фильмов
+    rc = FindFilmIds(name_file_name, actor_name, film_names);
     if (!rc)
     {
         std::vector<bool> checked_films(film_names.size(), false);
+        //находим имена фильмов по id и чистим неподходящие по критериям
         FindFilmNames(title_file_name, film_names, checked_films); 
-
         rc = ClearFilmNames(film_names, checked_films);
         if (!rc)
         {

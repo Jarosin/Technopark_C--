@@ -13,7 +13,7 @@ bool isRussian(std::string name)
     return true;
 }
 
-int FindFilms(std::string file_name, std::string actor_name, std::vector<std::string>& film_names)
+int FindFilmIds(std::string file_name, std::string actor_name, std::vector<std::string>& film_names)
 {
     std::ifstream myfile;
     myfile.open(file_name);

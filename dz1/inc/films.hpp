@@ -7,6 +7,6 @@
 #include <locale> 
 void FindFilmNames(std::string file_name, std::vector<std::string> &films, std::vector<bool> &checked_films);
 std::vector<std::string> ParseFilmIdString(std::string film_ids);
-int FindFilms(std::string file_name, std::string actor_name, std::vector<std::string> &filmed_names);
+int FindFilmIds(std::string file_name, std::string actor_name, std::vector<std::string> &filmed_names);
 bool isRussian(std::string name);
 int ClearFilmNames(std::vector<std::string> &film_names, std::vector<bool> &checked_films);
