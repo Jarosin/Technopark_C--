@@ -28,6 +28,7 @@ int CheckDocument(std::string file_name, int columns)
         }
     }
     std::cout << "File has wrong number of columns" << std::endl;
+    file.close();
     return 1;
 }
 

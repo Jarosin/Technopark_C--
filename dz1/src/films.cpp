@@ -28,7 +28,6 @@ int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::stri
         else
             std::getline(in, temp, '\n');
     }
-    in.close();
     if (name.length() == 0)
     {
         std::cout << "Couldnt find any films with the actor" << std::endl;
@@ -95,7 +94,6 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
         //дочитываем строку
         std::getline(in, temp, '\n');  
     }
-    in.close();
 }
 
 int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string> &russian_titles, std::vector<bool> &checked_films)
