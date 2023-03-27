@@ -1,6 +1,7 @@
 #include <films.hpp>
 constexpr char sep = '\t';
-int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::string>& film_names)
+int FindFilmIds(std::ifstream &in, std::string actor_name,
+    std::vector<std::string>& film_names)
 {
     if (!in)
     {
@@ -49,7 +50,8 @@ std::vector<std::string> ParseFilmIdString(std::string film_ids)
     return res;
 }
 
-void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vector<bool> &checked_films)
+void FindFilmNames(std::ifstream &in, std::vector<std::string> &films,
+    std::vector<bool> &checked_films)
 {
     if (!in.is_open())
     {
@@ -98,7 +100,8 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     }
 }
 
-int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string> &russian_titles, std::vector<bool> &checked_films)
+int ClearFilmNames(std::vector<std::string> &film_names,
+    std::vector<std::string> &russian_titles, std::vector<bool> &checked_films)
 {
     std::vector<std::string> res = film_names;
     film_names.clear();
@@ -125,7 +128,8 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string
     //нет найденных фильмов
     if (!found_films)
     {
-        std::cout << "Could not find required info on films in a file" << std::endl;
+        std::cout << "Could not find required\
+         info on films in a file" << std::endl;
         return 1;
     }
     //все фильмы не подошли/не были проверены

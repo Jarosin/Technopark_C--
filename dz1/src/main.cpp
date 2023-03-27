@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
 
     //проверка валидности входных данных
     int rc;
-    if (rc = ParseArguments(argc, argv, name_file_name, title_file_name, title_akas_file_name, actor_name))
+    if (rc = ParseArguments(argc, argv, name_file_name, title_file_name,
+        title_akas_file_name, actor_name))
     {
         return rc;
     }

@@ -13,7 +13,8 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name,
         {"title-akas-name", 1, 0, 'k'},
         {0, 0, 0, 0}
     };
-     while ((opt = getopt_long_only(argc, argv, "g", long_options, &option_index)) != -1)
+     while ((opt = getopt_long_only(argc, argv, "g",
+            long_options, &option_index)) != -1)
     {
         switch(opt)
         {
@@ -29,7 +30,9 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name,
                 actor_name = optarg;
                 break;
             case 'h':
-                std::cout << "Required arguments: --name-basics-file=filename1 --title-basics-file=filename2 --actor-name=actor_name --title-akas-name" << std::endl;
+                std::cout << "Required arguments: --name-basics-file=filename1\
+                 --title-basics-file=filename2 --actor-name=actor_name\
+                  --title-akas-name" << std::endl;
                 return 1;
                 break;
             case 'k':
@@ -42,7 +45,8 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name,
                 return 1;
         }
     }
-    if (title_file_name.empty() || name_file_name.empty() || actor_name.empty() || title_akas_file_name.empty())
+    if (title_file_name.empty() || name_file_name.empty() || 
+        actor_name.empty() || title_akas_file_name.empty())
     {
         std::cout << "Not all arguments were given" << std::endl;
         return 1;
