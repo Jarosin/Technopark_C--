@@ -14,3 +14,4 @@ int ClearFilmNames(std::vector<std::string> &film_names,
                    std::vector<std::string> &russian_titles,
                    std::vector<bool> &checked_films);
 int CheckRus(std::ifstream &in, std::vector<std::string> &films);
+

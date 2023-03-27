@@ -25,3 +25,4 @@ int CheckDocument(std::string file_name, int columns) {
   file.close();
   return 1;
 }
+
