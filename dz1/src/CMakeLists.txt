@@ -1,1 +1,0 @@
-add_executable(dz1 main.cpp args.cpp films.cpp file.cpp)
