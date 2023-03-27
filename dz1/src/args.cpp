@@ -1,5 +1,7 @@
 #include "args.hpp"
-int ParseArguments(int argc, char *argv[], std::string &name_file_name, std::string &title_file_name, std::string &title_akas_file_name, std::string &actor_name)
+int ParseArguments(int argc, char *argv[], std::string &name_file_name, 
+    std::string &title_file_name, std::string &title_akas_file_name, 
+    std::string &actor_name)
 {
     int opt;
     int option_index = 0;
