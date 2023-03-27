@@ -60,11 +60,13 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     while (name.empty() && !in.eof())
     {
         std::getline(in, temp, sep);
+        int cur = -1;
         //пока так из-за использования арифметики указателей
-        for (auto it = films.begin(); it < films.end(); it++)
+        for (auto it : films)
         {
+            cur++;
             //если не нужный id - идем дальше
-            if ((*it) != temp)
+            if (it != temp)
             {
                 continue;
             }   
@@ -72,13 +74,13 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
             std::getline(in, temp, sep);
             if (temp != "movie")
             {
-                *it = "";
+                it = "";
                 break;
             }
 
             //получаем primaryTitle
             std::getline(in, temp, sep);
-            *it = temp;
+            it = temp;
             //пропускаем originalTitle
             std::getline(in, temp, sep);
 
@@ -86,9 +88,9 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
             std::getline(in, temp, sep);
             if (temp == "1")
             {
-                *it = "";
+                it = "";
             } 
-            checked_films[it - films.begin()] = true;
+            checked_films[cur] = true;
             break;
         }
         //дочитываем строку
@@ -101,22 +103,24 @@ int ClearFilmNames(std::vector<std::string> &film_names, std::vector<std::string
     std::vector<std::string> res = film_names;
     film_names.clear();
     int rc = 0, found_films = 0;
-    for (auto it = res.begin(); it < res.end(); it++)
+    int cur = 0;
+    for (auto it : res)
     {
         //отмечаем что смогли найти фильм
-        if (checked_films[it - res.begin()])
+        if (checked_films[cur])
         {
             found_films++;
         }
         //сливаем вместе если найдено хотя бы одно из названий
-        if (checked_films[it - res.begin()] && *it != "")
+        if (checked_films[cur] && it != "")
         {
-            if (!russian_titles[it - res.begin()].empty())
+            if (!russian_titles[cur].empty())
             {
-                *it = russian_titles[it - res.begin()];
+                it = russian_titles[cur];
             }
-            film_names.push_back(*it);
+            film_names.push_back(it);
         }
+        cur++;
     }
     //нет найденных фильмов
     if (!found_films)
@@ -144,17 +148,19 @@ int CheckRus(std::ifstream &in, std::vector<std::string> &films)
     }
     while (!in.eof())
     {
+        int cur = -1;
         std::getline(in, temp, sep);
-        for (auto it = res.begin(); it < res.end(); it++)
+        for (auto it : res)
         {
-            if (temp != *it)
+            cur++;
+            if (temp != it)
                 continue;
             std::getline(in, temp, sep);
             std::getline(in, name, sep);
             std::getline(in, temp, sep);
             if (temp == "RU")
             {
-                films[it - res.begin()] = name;
+                films[cur] = name;
             }
         }
         std::getline(in, temp, '\n');
