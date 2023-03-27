@@ -1,5 +1,5 @@
 #include <films.hpp>
-constexpr char div = '\t';
+constexpr char sep = '\t';
 int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::string>& film_names)
 {
     if (!in)
@@ -13,14 +13,14 @@ int FindFilmIds(std::ifstream &in, std::string actor_name, std::vector<std::stri
         //2-ой столбик - имя актера
         for (int i = 0; i < 2; i++)
         {
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
         }
         if (temp == actor_name)
         {
             //6-ой столбик - перечисление id фильмов актера
             for (int i = 0; i < 3; i++)
             {
-                std::getline(in, temp, div);
+                std::getline(in, temp, sep);
             }
             //берем до конца строки чтобы не захватить лишнего со следующей
             std::getline(in, name, '\n');
@@ -59,7 +59,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
     std::string temp;
     while (name.empty() && !in.eof())
     {
-        std::getline(in, temp, div);
+        std::getline(in, temp, sep);
         //пока так из-за использования арифметики указателей
         for (auto it = films.begin(); it < films.end(); it++)
         {
@@ -69,7 +69,7 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
                 continue;
             }   
 
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
             if (temp != "movie")
             {
                 *it = "";
@@ -77,13 +77,13 @@ void FindFilmNames(std::ifstream &in, std::vector<std::string> &films, std::vect
             }
 
             //получаем primaryTitle
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
             *it = temp;
             //пропускаем originalTitle
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
 
             //проверка на фильм для взрослых
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
             if (temp == "1")
             {
                 *it = "";
@@ -144,14 +144,14 @@ int CheckRus(std::ifstream &in, std::vector<std::string> &films)
     }
     while (!in.eof())
     {
-        std::getline(in, temp, div);
+        std::getline(in, temp, sep);
         for (auto it = res.begin(); it < res.end(); it++)
         {
             if (temp != *it)
                 continue;
-            std::getline(in, temp, div);
-            std::getline(in, name, div);
-            std::getline(in, temp, div);
+            std::getline(in, temp, sep);
+            std::getline(in, name, sep);
+            std::getline(in, temp, sep);
             if (temp == "RU")
             {
                 films[it - res.begin()] = name;
