@@ -47,3 +47,4 @@ int ParseArguments(int argc, char *argv[], std::string &name_file_name,
   }
   return 0;
 }
+

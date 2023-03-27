@@ -143,3 +143,4 @@ int CheckRus(std::ifstream &in, std::vector<std::string> &films) {
   }
   return 0;
 }
+
