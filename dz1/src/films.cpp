@@ -9,12 +9,12 @@ int FindFilmIds(std::ifstream &in, std::string actor_name,
   std::string temp;
   while (name.empty() && !in.eof()) {
     // 2-ой столбик - имя актера
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < NAME_COLUMN; i++) {
       std::getline(in, temp, sep);
     }
     if (temp == actor_name) {
       // 6-ой столбик - перечисление id фильмов актера
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < FILM_ID_COLUMN - NAME_COLUMN; i++) {
         std::getline(in, temp, sep);
       }
       // берем до конца строки чтобы не захватить лишнего со следующей
@@ -143,4 +143,3 @@ int CheckRus(std::ifstream &in, std::vector<std::string> &films) {
   }
   return 0;
 }
-
