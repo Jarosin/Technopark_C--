@@ -8,7 +8,6 @@ using uptr_icalc = std::unique_ptr<ICalculatable>;
 class ICalculatableUnary : public ICalculatable {
  public:
   ICalculatableUnary(uptr_icalc var);
-  ICalculatableUnary(ICalculatableUnary &&other);
   virtual ~ICalculatableUnary() = 0;
 
  protected:

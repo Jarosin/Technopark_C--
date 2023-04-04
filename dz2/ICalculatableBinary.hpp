@@ -8,7 +8,6 @@ using uptr_icalc = std::unique_ptr<ICalculatable>;
 class ICalculatableBinary : public ICalculatable {
  public:
   ICalculatableBinary(uptr_icalc var1, uptr_icalc var2);
-  ICalculatableBinary(ICalculatableBinary &&other);
   virtual ~ICalculatableBinary() = 0;
 
  protected:

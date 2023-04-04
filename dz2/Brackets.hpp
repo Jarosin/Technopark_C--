@@ -5,7 +5,7 @@
 #include "ICalculatable.hpp"
 #include "ICalculatableUnary.hpp"
 #include "memory"
-class Brackets : private ICalculatableUnary {
+class Brackets : public ICalculatableUnary {
  public:
   using ICalculatableUnary::ICalculatableUnary;
   ~Brackets() = default;
