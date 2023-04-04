@@ -3,13 +3,12 @@
 
 #pragma once
 
-class ICalculatable
-{
-public:
-    ICalculatable();
-    virtual ~ICalculatable() = 0;
-    virtual double Calculate() = 0;
-private:
+class ICalculatable {
+ public:
+  virtual ~ICalculatable() = 0;
+  virtual double Calculate() = 0;
+
+ private:
 };
 
 #endif
