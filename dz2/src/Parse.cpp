@@ -47,23 +47,36 @@ void DeleteOuterBrackets(std::string &inp)
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
+  int start = 0;
   if (inp[0] == ')') {
     int end = FindOpeningBracket(inp);
     std::string sub = inp.substr(1, end - 1);
     inp[end] = '~';
     res = CalculateOperation(sub);
     res = std::make_unique<Brackets>(std::move(res));
-    return res;
+    inp = inp.substr(end);
+    start = 1;
+    met_number = true;
   }
-  for (char *i = &(inp[0]); *i != '\0'; i++) {
-    if (*i == '+' || *i == '-' || *i == '*') {
+  for (char *i = &(inp[start]); *i != '\0'; i++) {
+    if (*i == '+' || *i == '-') {
       // самая правая тильда - последний обработанный симовл
       *(i - 1) = '~';
       return res;
     }
+    if (*i == '*')
+    {
+      if (!met_number)
+        throw std::invalid_argument("Unary multiplication doesnt exist");
+      std::string right = inp.substr(i - &inp[0] + 1);
+      auto right_operator = getArg(right);
+      res = std::make_unique<Multiplication>(std::move(res), std::move(right_operator));
+      inp = right;
+      return res;
+    }
     if (isdigit(*i)) {
       if (met_number) {
-        throw std::invalid_argument("Two numbers in a row");
+        throw std::invalid_argument("Two numbers without binary operations in a row");
       }
       met_number = true;
       std::string num = "";
