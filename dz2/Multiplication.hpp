@@ -14,5 +14,4 @@ class Multiplication : public ICalculatableBinary {
   double Calculate() override;
 };
 
-
 #endif

@@ -2,8 +2,8 @@
 #define ICALCULATABLEUNARY_H
 
 #pragma once
-#include "memory"
 #include "ICalculatable.hpp"
+#include "memory"
 using uptr_icalc = std::unique_ptr<ICalculatable>;
 class ICalculatableUnary : public ICalculatable {
  public:
@@ -13,6 +13,5 @@ class ICalculatableUnary : public ICalculatable {
  protected:
   uptr_icalc var_;
 };
-
 
 #endif
