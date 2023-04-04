@@ -2,15 +2,18 @@
 #define ICALCULATABLEUNARY_H
 
 #pragma once
+#include "memory"
+#include "ICalculatable.hpp"
+using uptr_icalc = std::unique_ptr<ICalculatable>;
+class ICalculatableUnary : public ICalculatable {
+ public:
+  ICalculatableUnary(uptr_icalc var);
+  ICalculatableUnary(ICalculatableUnary &&other);
+  virtual ~ICalculatableUnary() = 0;
 
-class ICalculatableUnary
-{
-public:
-    ICalculatableUnary();
-    ~ICalculatableUnary();
-
-private:
-
+ protected:
+  uptr_icalc var_;
 };
+
 
 #endif
