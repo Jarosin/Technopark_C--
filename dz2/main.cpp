@@ -7,7 +7,7 @@
 int main() {
     auto a = std::make_unique<Number>(Number(2));
     auto b = std::make_unique<Number>(Number(3));
-    Addition add(std::move(a), std::move(b));
-    std::cout << add.Calculate() << std::endl;
+    auto add = std::make_unique<Addition>(std::move(a), std::move(b));
+    std::cout << add->Calculate() << std::endl;
     return 0;
 }

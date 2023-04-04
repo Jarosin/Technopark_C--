@@ -5,6 +5,7 @@
 
 class ICalculatable {
  public:
+  ICalculatable() = default;
   virtual ~ICalculatable() = 0;
   virtual double Calculate() = 0;
 
