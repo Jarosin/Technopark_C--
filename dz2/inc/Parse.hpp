@@ -17,3 +17,4 @@
 #include "Substraction.hpp"
 std::unique_ptr<ICalculatable> getArg(std::string &inp);
 std::unique_ptr<ICalculatable> ParseInput(std::string &inp);
+std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp);

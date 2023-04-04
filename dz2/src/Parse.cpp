@@ -19,15 +19,42 @@ bool CheckBrackets(std::string &inp) {
   }
   return true;
 }
+int FindOpeningBracket(std::string &inp) {
+  int i = 0, closing = 0, opening = 0;
+  do {
+    if (inp[i] == ')') {
+      closing++;
+    } else if (inp[i] == '(') {
+      opening++;
+    }
+    i++;
+  } while (closing != opening);
+  return i - 1;
+}
 void DeleteSpaces(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(" "), "");
 }
 void ReplaceCommas(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(","), ".");
 }
+void DeleteOuterBrackets(std::string &inp)
+{
+  while (inp[0] == '(' && inp[inp.size() - 1] == ')')
+  {
+    inp = inp.substr(1, inp.size() - 2);
+  }
+}
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
+  if (inp[0] == ')') {
+    int end = FindOpeningBracket(inp);
+    std::string sub = inp.substr(1, end - 1);
+    inp[end] = '~';
+    res = CalculateOperation(sub);
+    res = std::make_unique<Brackets>(std::move(res));
+    return res;
+  }
   for (char *i = &(inp[0]); *i != '\0'; i++) {
     if (*i == '+' || *i == '-' || *i == '*') {
       // самая правая тильда - последний обработанный симовл
@@ -67,7 +94,7 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   }
   return res;
 }
-// TODO: доделать парсинг скобочек и умножения
+// TODO: доделать парсинг скобочек и умножения, вынести тильду в константы(и символы-замены для слов)
 std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   std::unique_ptr<ICalculatable> val1 = getArg(inp);
@@ -100,6 +127,7 @@ std::unique_ptr<ICalculatable> ParseInput(std::string &inp) {
   ReplaceWords(inp);
   DeleteSpaces(inp);
   ReplaceCommas(inp);
+  DeleteOuterBrackets(inp);
   std::reverse(inp.begin(), inp.end());
   std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
   return res;
