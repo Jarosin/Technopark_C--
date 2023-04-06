@@ -88,10 +88,10 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
         throw std::invalid_argument("Unary operations without number");
       }
       switch (*i) {
-        case '&':
+        case kCeilSign[0]:
           res = std::make_unique<Ceil>(std::move(res));
           break;
-        case '@':
+        case kSqrtSign[0]:
           res = std::make_unique<SqRoot>(std::move(res));
           break;
         default:
