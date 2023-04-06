@@ -37,46 +37,37 @@ void DeleteSpaces(std::string &inp) {
 void ReplaceCommas(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(","), ".");
 }
-void DeleteOuterBrackets(std::string &inp)
-{
-  while (inp[0] == '(' && inp[inp.size() - 1] == ')')
-  {
-    inp = inp.substr(1, inp.size() - 2);
-  }
-}
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
-  int start = 0;
+  char *i = &(inp[0]);
   if (inp[0] == ')') {
     int end = FindOpeningBracket(inp);
     std::string sub = inp.substr(1, end - 1);
-    inp[end] = '~';
     res = CalculateOperation(sub);
     res = std::make_unique<Brackets>(std::move(res));
-    inp = inp.substr(end);
-    start = 1;
+    inp = inp.substr(end + 1);
     met_number = true;
   }
-  for (char *i = &(inp[start]); *i != '\0'; i++) {
+  for (i = &(inp[0]); *i != '\0'; i++) {
     if (*i == '+' || *i == '-') {
       // самая правая тильда - последний обработанный симовл
-      *(i - 1) = '~';
+      inp = inp.substr(i - &(inp[0]));
       return res;
     }
-    if (*i == '*')
-    {
+    if (*i == '*') {
       if (!met_number)
         throw std::invalid_argument("Unary multiplication doesnt exist");
-      std::string right = inp.substr(i - &inp[0] + 1);
-      auto right_operator = getArg(right);
-      res = std::make_unique<Multiplication>(std::move(res), std::move(right_operator));
-      inp = right;
+      inp = inp.substr(i - &inp[0] + 1);
+      auto right_operator = getArg(inp);
+      res = std::make_unique<Multiplication>(std::move(res),
+                                             std::move(right_operator));
       return res;
     }
     if (isdigit(*i)) {
       if (met_number) {
-        throw std::invalid_argument("Two numbers without binary operations in a row");
+        throw std::invalid_argument(
+            "Two numbers without binary operations in a row");
       }
       met_number = true;
       std::string num = "";
@@ -105,15 +96,15 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
       }
     }
   }
+  inp = "";
   return res;
 }
-// TODO: доделать парсинг скобочек и умножения, вынести тильду в константы(и символы-замены для слов)
 std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   std::unique_ptr<ICalculatable> val1 = getArg(inp);
-  if (inp.find_last_of('~') == std::string::npos) return val1;
-  char operation = inp[inp.find_last_of('~') + 1];
-  std::string sub = inp.substr(inp.find_last_of('~') + 2);
+  if (inp.empty()) return val1;
+  char operation = inp[0];
+  std::string sub = inp.substr(1);
   std::unique_ptr<ICalculatable> val2 = CalculateOperation(sub);
   switch (operation) {
     case '+':
@@ -140,7 +131,6 @@ std::unique_ptr<ICalculatable> ParseInput(std::string &inp) {
   ReplaceWords(inp);
   DeleteSpaces(inp);
   ReplaceCommas(inp);
-  DeleteOuterBrackets(inp);
   std::reverse(inp.begin(), inp.end());
   std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
   return res;
