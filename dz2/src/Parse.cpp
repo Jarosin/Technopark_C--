@@ -1,8 +1,11 @@
 #include "Parse.hpp"
-// TODO: унарный минус/плюс - ?(может стоит брать как второй оператор 0)
+constexpr auto kSqrtSign = "@";
+constexpr auto kSqrtWord = "sqrt";
+constexpr auto kCeilSign = "&";
+constexpr auto kCeilWord = "ceil";
 void ReplaceWords(std::string &inp) {
-  inp = std::regex_replace(inp, std::regex("sqrt"), "@");
-  inp = std::regex_replace(inp, std::regex("ceil"), "&");
+  inp = std::regex_replace(inp, std::regex(kSqrtWord), kSqrtSign);
+  inp = std::regex_replace(inp, std::regex(kCeilWord), kCeilSign);
 }
 bool CheckBrackets(std::string &inp) {
   int open = 0, close = 0;
@@ -129,7 +132,7 @@ std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   }
   return res;
 }
-std::unique_ptr<ICalculatable> ParseInput(std::string &inp) {
+std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   for (auto elm : inp) {
     elm = tolower(elm);
   }
@@ -139,6 +142,8 @@ std::unique_ptr<ICalculatable> ParseInput(std::string &inp) {
   ReplaceWords(inp);
   DeleteSpaces(inp);
   ReplaceCommas(inp);
+  if (inp.empty())
+    throw std::invalid_argument("Given string is empty");
   std::reverse(inp.begin(), inp.end());
   std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
   return res;
