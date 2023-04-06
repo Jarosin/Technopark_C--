@@ -2,4 +2,3 @@
 
 #include <cmath>
 double Ceil::Calculate() { return ceil(var_->Calculate()); }
-

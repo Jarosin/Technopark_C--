@@ -15,4 +15,3 @@ class Brackets : public ICalculatableUnary {
 };
 
 #endif
-

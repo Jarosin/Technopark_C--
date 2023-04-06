@@ -14,4 +14,3 @@ class Number : public ICalculatable {
 };
 
 #endif
-

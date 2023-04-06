@@ -15,4 +15,3 @@ class Ceil : public ICalculatableUnary {
  private:
 };
 #endif
-
