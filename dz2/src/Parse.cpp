@@ -111,15 +111,13 @@ std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   std::unique_ptr<ICalculatable> val2 = CalculateOperation(sub);
   switch (operation) {
     case '+':
-      if (!val2)
-      {
+      if (!val2) {
         val2 = std::make_unique<Number>(0);
       }
       res = std::make_unique<Addition>(std::move(val2), std::move(val1));
       break;
     case '-':
-      if (!val2)
-      {
+      if (!val2) {
         val2 = std::make_unique<Number>(0);
       }
       res = std::make_unique<Substraction>(std::move(val2), std::move(val1));
@@ -142,8 +140,7 @@ std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   ReplaceWords(inp);
   DeleteSpaces(inp);
   ReplaceCommas(inp);
-  if (inp.empty())
-    throw std::invalid_argument("Given string is empty");
+  if (inp.empty()) throw std::invalid_argument("Given string is empty");
   std::reverse(inp.begin(), inp.end());
   std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
   return res;

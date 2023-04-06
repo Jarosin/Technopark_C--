@@ -1,4 +1,5 @@
 #include "ICalculatableBinary.hpp"
+
 #include <stdexcept>
 ICalculatableBinary::ICalculatableBinary(uptr_icalc var1, uptr_icalc var2)
     : var1_(std::move(var1)), var2_(std::move(var2)) {
