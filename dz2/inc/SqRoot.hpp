@@ -16,3 +16,4 @@ class SqRoot : public ICalculatableUnary {
 };
 
 #endif
+

@@ -19,3 +19,4 @@ int main(int argc, char* argv[]) {
   std::cout << res->Calculate() << std::endl;
   return 0;
 }
+

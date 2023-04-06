@@ -9,3 +9,4 @@ ICalculatableBinary::ICalculatableBinary(uptr_icalc var1, uptr_icalc var2)
 }
 
 ICalculatableBinary::~ICalculatableBinary() = default;
+

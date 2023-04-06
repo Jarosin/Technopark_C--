@@ -145,3 +145,4 @@ std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
   return res;
 }
+

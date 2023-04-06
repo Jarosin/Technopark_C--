@@ -15,3 +15,4 @@ class ICalculatableUnary : public ICalculatable {
 };
 
 #endif
+

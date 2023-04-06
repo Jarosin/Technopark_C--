@@ -15,3 +15,4 @@ class ICalculatableBinary : public ICalculatable {
 };
 
 #endif
+

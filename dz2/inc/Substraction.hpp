@@ -15,3 +15,4 @@ class Substraction : public ICalculatableBinary {
 };
 
 #endif
+

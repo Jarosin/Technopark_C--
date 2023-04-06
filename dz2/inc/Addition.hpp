@@ -14,3 +14,4 @@ class Addition : public ICalculatableBinary {
 };
 
 #endif
+

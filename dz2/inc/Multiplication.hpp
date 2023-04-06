@@ -15,3 +15,4 @@ class Multiplication : public ICalculatableBinary {
 };
 
 #endif
+
