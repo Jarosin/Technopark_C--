@@ -108,9 +108,17 @@ std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   std::unique_ptr<ICalculatable> val2 = CalculateOperation(sub);
   switch (operation) {
     case '+':
-      res = std::make_unique<Addition>(std::move(val1), std::move(val2));
+      if (!val2)
+      {
+        val2 = std::make_unique<Number>(0);
+      }
+      res = std::make_unique<Addition>(std::move(val2), std::move(val1));
       break;
     case '-':
+      if (!val2)
+      {
+        val2 = std::make_unique<Number>(0);
+      }
       res = std::make_unique<Substraction>(std::move(val2), std::move(val1));
       break;
     case '*':
