@@ -3,6 +3,9 @@ constexpr auto kSqrtSign = "@";
 constexpr auto kSqrtWord = "sqrt";
 constexpr auto kCeilSign = "&";
 constexpr auto kCeilWord = "ceil";
+constexpr auto kAddSign = '+';
+constexpr auto kSubSign = '-';
+constexpr auto kMulSign = '*';
 
 
 void ReplaceWords(std::string &inp) {
@@ -60,11 +63,11 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
     met_number = true;
   }
   for (i = &(inp[0]); *i != '\0'; i++) {
-    if (*i == '+' || *i == '-') {
+    if (*i == kAddSign || *i == kSubSign) {
       inp = inp.substr(i - &(inp[0]));
       return res;
     }
-    if (*i == '*') {
+    if (*i == kMulSign) {
       if (!met_number)
         throw std::invalid_argument("Unary multiplication doesnt exist");
       inp = inp.substr(i - &inp[0] + 1);
@@ -117,19 +120,19 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
   std::string sub = inp.substr(1);
   std::unique_ptr<ICalculatable> val2 = CreateOperation(sub);
   switch (operation) {
-    case '+':
+    case kAddSign:
       if (!val2) {
         val2 = std::make_unique<Number>(0);
       }
       res = std::make_unique<Addition>(std::move(val2), std::move(val1));
       break;
-    case '-':
+    case kSubSign:
       if (!val2) {
         val2 = std::make_unique<Number>(0);
       }
       res = std::make_unique<Substraction>(std::move(val2), std::move(val1));
       break;
-    case '*':
+    case kMulSign:
       res = std::make_unique<Multiplication>(std::move(val1), std::move(val2));
       break;
     default:
