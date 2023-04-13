@@ -1,7 +1,6 @@
 #ifndef NUMBER_H
 #define NUMBER_H
 
-#pragma once
 #include "ICalculatable.hpp"
 class Number : public ICalculatable {
  public:

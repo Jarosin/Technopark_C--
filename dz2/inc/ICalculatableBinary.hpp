@@ -1,7 +1,6 @@
 #ifndef ICALCULATABLEBINARY_H
 #define ICALCULATABLEBINARY_H
 
-#pragma once
 #include "ICalculatable.hpp"
 #include "memory"
 using uptr_icalc = std::unique_ptr<ICalculatable>;

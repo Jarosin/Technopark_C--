@@ -1,7 +1,6 @@
 #ifndef SUBSTRACTION_H
 #define SUBSTRACTION_H
 
-#pragma once
 #include "ICalculatable.hpp"
 #include "ICalculatableBinary.hpp"
 #include "memory"

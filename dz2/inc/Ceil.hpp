@@ -1,8 +1,6 @@
 #ifndef CEIL_H
 #define CEIL_H
 
-#pragma once
-
 #include "ICalculatable.hpp"
 #include "ICalculatableUnary.hpp"
 #include "memory"

@@ -1,7 +1,6 @@
 #ifndef SQROOT_H
 #define SQROOT_H
 
-#pragma once
 
 #include "ICalculatable.hpp"
 #include "ICalculatableUnary.hpp"

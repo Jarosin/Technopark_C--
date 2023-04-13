@@ -1,7 +1,6 @@
 #ifndef BRACKETS_H
 #define BRACKETS_H
 
-#pragma once
 #include "ICalculatable.hpp"
 #include "ICalculatableUnary.hpp"
 #include "memory"

@@ -1,7 +1,6 @@
 #ifndef ICALCULATABLE_H
 #define ICALCULATABLE_H
 
-#pragma once
 
 class ICalculatable {
  public:

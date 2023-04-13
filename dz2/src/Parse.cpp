@@ -3,10 +3,13 @@ constexpr auto kSqrtSign = "@";
 constexpr auto kSqrtWord = "sqrt";
 constexpr auto kCeilSign = "&";
 constexpr auto kCeilWord = "ceil";
+
+
 void ReplaceWords(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(kSqrtWord), kSqrtSign);
   inp = std::regex_replace(inp, std::regex(kCeilWord), kCeilSign);
 }
+
 bool CheckBrackets(std::string &inp) {
   int open = 0, close = 0;
   for (auto elm : inp) {
@@ -22,6 +25,7 @@ bool CheckBrackets(std::string &inp) {
   }
   return true;
 }
+
 int FindOpeningBracket(std::string &inp) {
   int i = 0, closing = 0, opening = 0;
   do {
@@ -34,12 +38,15 @@ int FindOpeningBracket(std::string &inp) {
   } while (closing != opening);
   return i - 1;
 }
+
 void DeleteSpaces(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(" "), "");
 }
+
 void ReplaceCommas(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(","), ".");
 }
+
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
@@ -47,14 +54,13 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   if (inp[0] == ')') {
     int end = FindOpeningBracket(inp);
     std::string sub = inp.substr(1, end - 1);
-    res = CalculateOperation(sub);
+    res = CreateOperation(sub);
     res = std::make_unique<Brackets>(std::move(res));
     inp = inp.substr(end + 1);
     met_number = true;
   }
   for (i = &(inp[0]); *i != '\0'; i++) {
     if (*i == '+' || *i == '-') {
-      // самая правая тильда - последний обработанный симовл
       inp = inp.substr(i - &(inp[0]));
       return res;
     }
@@ -102,13 +108,14 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   inp = "";
   return res;
 }
-std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
+
+std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   std::unique_ptr<ICalculatable> val1 = getArg(inp);
   if (inp.empty()) return val1;
   char operation = inp[0];
   std::string sub = inp.substr(1);
-  std::unique_ptr<ICalculatable> val2 = CalculateOperation(sub);
+  std::unique_ptr<ICalculatable> val2 = CreateOperation(sub);
   switch (operation) {
     case '+':
       if (!val2) {
@@ -130,6 +137,7 @@ std::unique_ptr<ICalculatable> CalculateOperation(std::string &inp) {
   }
   return res;
 }
+
 std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   for (auto elm : inp) {
     elm = tolower(elm);
@@ -142,6 +150,6 @@ std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   ReplaceCommas(inp);
   if (inp.empty()) throw std::invalid_argument("Given string is empty");
   std::reverse(inp.begin(), inp.end());
-  std::unique_ptr<ICalculatable> res = CalculateOperation(inp);
+  std::unique_ptr<ICalculatable> res = CreateOperation(inp);
   return res;
 }
