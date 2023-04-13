@@ -13,9 +13,9 @@ void ReplaceWords(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(kCeilWord), kCeilSign);
 }
 
-bool CheckBrackets(std::string &inp) {
+bool CheckBrackets(const std::string &inp) {
   int open = 0, close = 0;
-  for (auto elm : inp) {
+  for (const auto& elm : inp) {
     if (elm == '(') {
       open++;
     }
@@ -29,7 +29,7 @@ bool CheckBrackets(std::string &inp) {
   return true;
 }
 
-int FindOpeningBracket(std::string &inp) {
+int FindOpeningBracket(const std::string &inp) {
   int i = 0, closing = 0, opening = 0;
   do {
     if (inp[i] == ')') {
@@ -53,7 +53,7 @@ void ReplaceCommas(std::string &inp) {
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
-  char *i = &(inp[0]);
+
   if (inp[0] == ')') {
     int end = FindOpeningBracket(inp);
     std::string sub = inp.substr(1, end - 1);
@@ -62,11 +62,14 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
     inp = inp.substr(end + 1);
     met_number = true;
   }
-  for (i = &(inp[0]); *i != '\0'; i++) {
+
+  for (char *i = &(inp[0]); *i != '\0'; i++) {
+
     if (*i == kAddSign || *i == kSubSign) {
       inp = inp.substr(i - &(inp[0]));
       return res;
     }
+
     if (*i == kMulSign) {
       if (!met_number)
         throw std::invalid_argument("Unary multiplication doesnt exist");
@@ -76,11 +79,14 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
                                              std::move(right_operator));
       return res;
     }
+
     if (isdigit(*i)) {
+
       if (met_number) {
         throw std::invalid_argument(
             "Two numbers without binary operations in a row");
       }
+
       met_number = true;
       std::string num = "";
       while (*i != '\0') {
@@ -89,25 +95,31 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
         num += *i;
         i++;
       }
+
       std::reverse(num.begin(), num.end());
       res = std::make_unique<Number>(std::stod(num));
       i--;
     } else {
+
       if (!met_number) {
         throw std::invalid_argument("Unary operations without number");
       }
+
       switch (*i) {
         case kCeilSign[0]:
           res = std::make_unique<Ceil>(std::move(res));
           break;
+
         case kSqrtSign[0]:
           res = std::make_unique<SqRoot>(std::move(res));
           break;
+
         default:
           throw std::invalid_argument("Unknown operator given");
       }
     }
   }
+
   inp = "";
   return res;
 }
@@ -126,12 +138,14 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
       }
       res = std::make_unique<Addition>(std::move(val2), std::move(val1));
       break;
+
     case kSubSign:
       if (!val2) {
         val2 = std::make_unique<Number>(0);
       }
       res = std::make_unique<Substraction>(std::move(val2), std::move(val1));
       break;
+
     case kMulSign:
       res = std::make_unique<Multiplication>(std::move(val1), std::move(val2));
       break;
@@ -142,7 +156,7 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
 }
 
 std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
-  for (auto elm : inp) {
+  for (auto& elm : inp) {
     elm = tolower(elm);
   }
   if (!CheckBrackets(inp)) {
@@ -152,6 +166,7 @@ std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
   DeleteSpaces(inp);
   ReplaceCommas(inp);
   if (inp.empty()) throw std::invalid_argument("Given string is empty");
+
   std::reverse(inp.begin(), inp.end());
   std::unique_ptr<ICalculatable> res = CreateOperation(inp);
   return res;
