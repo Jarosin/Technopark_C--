@@ -1,13 +1,18 @@
 #ifndef PARSE_H
 #define PARSE_H
-#include <string.h>
 
-#include <memory>
+#include <string>
+constexpr auto kSqrtSign = "@";
+constexpr auto kSqrtWord = "sqrt";
+constexpr auto kCeilSign = "&";
+constexpr auto kCeilWord = "ceil";
+constexpr auto kAddSign = '+';
+constexpr auto kSubSign = '-';
+constexpr auto kMulSign = '*';
+constexpr auto kOpenBracket = '(';
+constexpr auto kCloseBracket = ')';
 
-#include "ICalculatable.hpp"
-
-std::unique_ptr<ICalculatable> getArg(std::string &inp);
-std::unique_ptr<ICalculatable> ParseInput(std::string inp);
-std::unique_ptr<ICalculatable> CreateOperation(std::string &inp);
+void ParseInput(std::string &inp);
+int FindOpeningBracket(const std::string &inp);
 
 #endif

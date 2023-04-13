@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "ICalculatable.hpp"
-#include "Parse.hpp"
+#include "ExpressionTree.hpp"
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
   std::string input(argv[1]);
   std::unique_ptr<ICalculatable> res;
   try {
-    res = ParseInput(input);
+    res = CreateTree(input);
   } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';
     return 1;
