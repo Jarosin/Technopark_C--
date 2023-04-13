@@ -6,6 +6,7 @@
 using uptr_icalc = std::unique_ptr<ICalculatable>;
 class ICalculatableBinary : public ICalculatable {
  public:
+  ICalculatableBinary() = delete;
   ICalculatableBinary(uptr_icalc var1, uptr_icalc var2);
   virtual ~ICalculatableBinary() = 0;
 
