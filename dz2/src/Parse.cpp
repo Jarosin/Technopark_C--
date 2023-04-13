@@ -6,7 +6,8 @@ constexpr auto kCeilWord = "ceil";
 constexpr auto kAddSign = '+';
 constexpr auto kSubSign = '-';
 constexpr auto kMulSign = '*';
-
+constexpr auto kOpenBracket = '(';
+constexpr auto kCloseBracket = ')';
 
 void ReplaceWords(std::string &inp) {
   inp = std::regex_replace(inp, std::regex(kSqrtWord), kSqrtSign);
@@ -16,10 +17,10 @@ void ReplaceWords(std::string &inp) {
 bool CheckBrackets(const std::string &inp) {
   int open = 0, close = 0;
   for (const auto& elm : inp) {
-    if (elm == '(') {
+    if (elm == kOpenBracket) {
       open++;
     }
-    if (elm == ')') {
+    if (elm == kCloseBracket) {
       if (close >= open) {
         return false;
       }
@@ -32,9 +33,9 @@ bool CheckBrackets(const std::string &inp) {
 int FindOpeningBracket(const std::string &inp) {
   int i = 0, closing = 0, opening = 0;
   do {
-    if (inp[i] == ')') {
+    if (inp[i] == kCloseBracket) {
       closing++;
-    } else if (inp[i] == '(') {
+    } else if (inp[i] == kOpenBracket) {
       opening++;
     }
     i++;
@@ -54,7 +55,7 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;
   bool met_number = false;
 
-  if (inp[0] == ')') {
+  if (inp[0] == kCloseBracket) {
     int end = FindOpeningBracket(inp);
     std::string sub = inp.substr(1, end - 1);
     res = CreateOperation(sub);
@@ -149,6 +150,7 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
     case kMulSign:
       res = std::make_unique<Multiplication>(std::move(val1), std::move(val2));
       break;
+
     default:
       throw std::invalid_argument("Unknown operator given");
   }
