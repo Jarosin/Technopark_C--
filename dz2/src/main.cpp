@@ -3,6 +3,7 @@
 
 #include "ICalculatable.hpp"
 #include "Parse.hpp"
+
 int main(int argc, char* argv[]) {
   if (argc != 2) {
     std::cout << "Wrong amount of arguments was given" << std::endl;

@@ -1,8 +1,10 @@
 #ifndef ICALCULATABLEUNARY_H
 #define ICALCULATABLEUNARY_H
 
+#include <memory>
+
 #include "ICalculatable.hpp"
-#include "memory"
+
 using uptr_icalc = std::unique_ptr<ICalculatable>;
 class ICalculatableUnary : public ICalculatable {
  public:

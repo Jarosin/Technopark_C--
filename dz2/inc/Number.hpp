@@ -2,6 +2,7 @@
 #define NUMBER_H
 
 #include "ICalculatable.hpp"
+
 class Number : public ICalculatable {
  public:
   Number(double number);

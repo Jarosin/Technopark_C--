@@ -1,4 +1,19 @@
 #include "Parse.hpp"
+
+#include <exception>
+#include <iostream>
+#include <regex>
+
+#include "Addition.hpp"
+#include "Brackets.hpp"
+#include "Ceil.hpp"
+#include "ICalculatableBinary.hpp"
+#include "ICalculatableUnary.hpp"
+#include "Multiplication.hpp"
+#include "Number.hpp"
+#include "SqRoot.hpp"
+#include "Substraction.hpp"
+
 constexpr auto kSqrtSign = "@";
 constexpr auto kSqrtWord = "sqrt";
 constexpr auto kCeilSign = "&";
@@ -16,7 +31,7 @@ void ReplaceWords(std::string &inp) {
 
 bool CheckBrackets(const std::string &inp) {
   int open = 0, close = 0;
-  for (const auto& elm : inp) {
+  for (const auto &elm : inp) {
     if (elm == kOpenBracket) {
       open++;
     }
@@ -65,7 +80,6 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   }
 
   for (char *i = &(inp[0]); *i != '\0'; i++) {
-
     if (*i == kAddSign || *i == kSubSign) {
       inp = inp.substr(i - &(inp[0]));
       return res;
@@ -82,7 +96,6 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
     }
 
     if (isdigit(*i)) {
-
       if (met_number) {
         throw std::invalid_argument(
             "Two numbers without binary operations in a row");
@@ -101,12 +114,12 @@ std::unique_ptr<ICalculatable> getArg(std::string &inp) {
       res = std::make_unique<Number>(std::stod(num));
       i--;
     } else {
-
       if (!met_number) {
         throw std::invalid_argument("Unary operations without number");
       }
 
       switch (*i) {
+
         case kCeilSign[0]:
           res = std::make_unique<Ceil>(std::move(res));
           break;
@@ -133,6 +146,7 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
   std::string sub = inp.substr(1);
   std::unique_ptr<ICalculatable> val2 = CreateOperation(sub);
   switch (operation) {
+
     case kAddSign:
       if (!val2) {
         val2 = std::make_unique<Number>(0);
@@ -158,7 +172,7 @@ std::unique_ptr<ICalculatable> CreateOperation(std::string &inp) {
 }
 
 std::unique_ptr<ICalculatable> ParseInput(std::string inp) {
-  for (auto& elm : inp) {
+  for (auto &elm : inp) {
     elm = tolower(elm);
   }
   if (!CheckBrackets(inp)) {
