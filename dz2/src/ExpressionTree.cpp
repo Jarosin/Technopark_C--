@@ -12,6 +12,7 @@
 #include "Number.hpp"
 #include "SqRoot.hpp"
 #include "Substraction.hpp"
+#include "Parse.hpp"
 
 std::unique_ptr<ICalculatable> getArg(std::string &inp) {
   std::unique_ptr<ICalculatable> res;

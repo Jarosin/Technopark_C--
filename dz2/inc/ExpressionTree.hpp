@@ -1,6 +1,6 @@
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
-#include "Parse.hpp"
+#include <string>
 #include <memory>
 
 #include "ICalculatable.hpp"
