@@ -2,4 +2,6 @@
 *.tsv
 /build
 dz1/src/main
+build
+.vscode
 dz1/dz1
